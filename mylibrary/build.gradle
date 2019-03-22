@@ -1,0 +1,49 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 26
+
+
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
+// 改变jar名称和位置
+task clearJar(type: Delete) {
+    delete 'build/outputs/AppUtil.jar'  // 删除路径
+}
+
+task makeJar(type: Copy) {
+    from('build/intermediates/bundles/release/') // 生成路径
+    into('build/outputs/')
+    include('classes.jar')
+    rename('classes.jar', 'AppUtil.jar')// AppUtil.jar jar包名
+}
+makeJar.dependsOn(clearJar, build)
+
+
